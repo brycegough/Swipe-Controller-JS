@@ -1,5 +1,5 @@
 ($ => {
-    window.swipeController = function(selector, handlers) {
+    window.SwipeController = function(selector, handlers) {
 
         // Swipe Up / Down / Left / Right
         var initialX = null;
