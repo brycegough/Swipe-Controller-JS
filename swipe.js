@@ -1,28 +1,32 @@
 ($ => {
-    window.SwipeController = function(selector, handlers) {
+    window.SwipeController = function(selector, handlers, options) {
 
         // Swipe Up / Down / Left / Right
         var initialX = null;
         var initialY = null;
-        var _this = this;
-
+    
+        // Options
+        options = typeof options === 'object' ? options : {};
+        options.preventDefault = options.preventDefault !== false;
+        this.options = options;
+        
         this.handlers = handlers;
         this.selector = selector;
         this.element = $(selector);
 
 
         if ($(this.element).length > 0) {
-            this.element[0].addEventListener("touchstart", function(e) { _this.startTouch(e); }, false);
-            this.element[0].addEventListener("touchmove", function(e) { _this.moveTouch(e); }, false);
+            this.element[0].addEventListener("touchstart", function(e) { this.startTouch(e); }, false);
+            this.element[0].addEventListener("touchmove", function(e) { this.moveTouch(e); }, false);
         }
 
         /* Functions */
-        this.startTouch = function(e) {
+        this.startTouch = (e) => {
             initialX = e.touches[0].clientX;
             initialY = e.touches[0].clientY;
         };
 
-        this.moveTouch = function(e) {
+        this.moveTouch = (e) => {
             if (initialX === null) {
               return;
             }
@@ -41,26 +45,26 @@
               // sliding horizontally
               if (diffX > 0) {
                 // swiped left
-                if (_this.handlers.hasOwnProperty('left') && typeof _this.handlers.left === 'function') {
-                    _this.handlers.left(e);
+                if (this.handlers.hasOwnProperty('left') && typeof this.handlers.left === 'function') {
+                    this.handlers.left(e);
                 }
               } else {
                 // swiped right
-                if (_this.handlers.hasOwnProperty('right') && typeof _this.handlers.right === 'function') {
-                    _this.handlers.right(e);
+                if (this.handlers.hasOwnProperty('right') && typeof this.handlers.right === 'function') {
+                    this.handlers.right(e);
                 }
               }
             } else {
               // sliding vertically
               if (diffY > 0) {
                 // swiped up
-                if (_this.handlers.hasOwnProperty('up') && typeof _this.handlers.up === 'function') {
-                    _this.handlers.up(e);
+                if (this.handlers.hasOwnProperty('up') && typeof this.handlers.up === 'function') {
+                    this.handlers.up(e);
                 }
               } else {
                 // swiped down
-                if (_this.handlers.hasOwnProperty('down') && typeof _this.handlers.down === 'function') {
-                    _this.handlers.down(e);
+                if (this.handlers.hasOwnProperty('down') && typeof this.handlers.down === 'function') {
+                    this.handlers.down(e);
                 }
               }
             }
@@ -68,7 +72,9 @@
             initialX = null;
             initialY = null;
 
-            e.preventDefault();
+            if (this.options.preventDefault) {
+                e.preventDefault();
+            }
         };
 
     };
