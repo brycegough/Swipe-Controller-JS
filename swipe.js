@@ -1,15 +1,13 @@
 ($ => {
     window.SwipeController = function(selector, options) {
-
         // Swipe Up / Down / Left / Right
-        var initialX = null;
-        var initialY = null;
+        var initialX = null, initialY = null;
     
-        // Options
         options = typeof options === 'object' ? options : {};
+        // Defaults
         options.preventDefault = options.preventDefault !== false;
-        this.options = options;
         
+        this.options = options;        
         this.handlers = {
             left: this.options.left || false,
             right: this.options.right || false,
@@ -73,9 +71,9 @@
 
         // Add event listeners
         if ($(this.element).length > 0) {
-            this.element[0].addEventListener("touchstart", function(e) { this.startTouch(e); }, false);
-            this.element[0].addEventListener("touchmove", function(e) { this.moveTouch(e); }, false);
+            this.element[0].addEventListener("touchstart", e => this.startTouch(e), false);
+            this.element[0].addEventListener("touchmove", e => this.moveTouch(e), false);
         }
 
-    };
+    }
   })(jQuery);
